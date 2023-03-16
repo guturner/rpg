@@ -40,10 +40,17 @@ object Application {
 
     titleBarService.printTitleBar(titleBar)
 
-    val map = mapService.buildMap(
+    var map = mapService.buildMap(
       configurationService.mapHeight,
       configurationService.mapWidth,
       configurationService.borderWidth)
+
+    map = mapService.addIcon(
+      'H',
+      20,
+      5,
+      configurationService.borderWidth,
+      map)
 
     mapService.printMap(map)
   }
