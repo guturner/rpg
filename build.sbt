@@ -6,3 +6,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "rpg"
   )
+
+resolvers += "Maven Central" at "https://mvnrepository.com/artifact"
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % Test
