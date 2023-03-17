@@ -1,6 +1,7 @@
 package com.guy.rpg
 
 import com.guy.rpg.configurations.ConfigurationService
+import com.guy.rpg.inputs.UserInputService
 import com.guy.rpg.maps.MapService
 import com.guy.rpg.titlebars.TitleBarService
 
@@ -9,6 +10,7 @@ object Application {
   private var configurationService: ConfigurationService = _
   private var titleBarService: TitleBarService = _
   private var mapService: MapService = _
+  private var userInputService: UserInputService = _
 
   private def initialize(): Unit = {
 
@@ -22,12 +24,16 @@ object Application {
     titleBarService = new TitleBarService()
 
     mapService = new MapService()
+
+    userInputService = new UserInputService()
   }
 
   def main(args: Array[String]): Unit = {
     initialize()
 
     buildExampleMap("Map 1")
+
+    userInputService.askForInput()
   }
 
   private def buildExampleMap(mapTitle: String): Unit = {
