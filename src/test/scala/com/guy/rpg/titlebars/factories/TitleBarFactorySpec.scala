@@ -1,12 +1,11 @@
-package com.guy.rpg.titlebars.services
+package com.guy.rpg.titlebars.factories
 
 import com.guy.rpg.titlebars.configurations.TitleBarConfig
-import com.guy.rpg.titlebars.services.TitleBarService
 import org.scalatest.flatspec.AnyFlatSpec
 
-class TitleBarServiceSpec extends AnyFlatSpec {
+class TitleBarFactorySpec extends AnyFlatSpec {
 
-  "TitleBarService" should "build a title bar with a border" in {
+  "TitleBarFactory" should "build a title bar with a border" in {
 
     // Given
     val titleBarHeight = 1
@@ -14,20 +13,18 @@ class TitleBarServiceSpec extends AnyFlatSpec {
     val borderWidth = 1
 
     val titleBarConfig = new TitleBarConfig(
+      title = "Test Map",
       titleBarHeight = titleBarHeight,
       titleBarWidth = titleBarWidth,
       titleBarBorderWidth = borderWidth)
 
-    val titleBarService = new TitleBarService(
+    // When
+    val titleBar = TitleBarFactory.buildTitleBar(
       titleBarConfig = titleBarConfig)
 
-    // When
-    val titleBar = titleBarService.buildTitleBar(
-      title = "Test Map")
-
     // Then
-    assert(titleBar.length == titleBarHeight + (borderWidth * 2))
-    assert(titleBar(0).length == titleBarWidth + (borderWidth * 2))
+    assert(titleBar.grid.length == titleBarHeight + (borderWidth * 2))
+    assert(titleBar.grid(0).length == titleBarWidth + (borderWidth * 2))
   }
 
   it should "build a title bar without a border" in {
@@ -38,20 +35,18 @@ class TitleBarServiceSpec extends AnyFlatSpec {
     val borderWidth = 0
 
     val titleBarConfig = new TitleBarConfig(
+      title = "Test Map",
       titleBarHeight = titleBarHeight,
       titleBarWidth = titleBarWidth,
       titleBarBorderWidth = borderWidth)
 
-    val titleBarService = new TitleBarService(
+    // When
+    val titleBar = TitleBarFactory.buildTitleBar(
       titleBarConfig = titleBarConfig)
 
-    // When
-    val titleBar = titleBarService.buildTitleBar(
-      title = "Test Map")
-
     // Then
-    assert(titleBar.length == titleBarHeight)
-    assert(titleBar(0).length == titleBarWidth)
+    assert(titleBar.grid.length == titleBarHeight)
+    assert(titleBar.grid(0).length == titleBarWidth)
   }
 
   it should "build a title bar with a thick border" in {
@@ -62,19 +57,17 @@ class TitleBarServiceSpec extends AnyFlatSpec {
     val borderWidth = 3
 
     val titleBarConfig = new TitleBarConfig(
+      title = "Test Map",
       titleBarHeight = titleBarHeight,
       titleBarWidth = titleBarWidth,
       titleBarBorderWidth = borderWidth)
 
-    val titleBarService = new TitleBarService(
+    // When
+    val titleBar = TitleBarFactory.buildTitleBar(
       titleBarConfig = titleBarConfig)
 
-    // When
-    val titleBar = titleBarService.buildTitleBar(
-      title = "Test Map")
-
     // Then
-    assert(titleBar.length == titleBarHeight + (borderWidth * 2))
-    assert(titleBar(0).length == titleBarWidth + (borderWidth * 2))
+    assert(titleBar.grid.length == titleBarHeight + (borderWidth * 2))
+    assert(titleBar.grid(0).length == titleBarWidth + (borderWidth * 2))
   }
 }

@@ -1,43 +1,31 @@
 package com.guy.rpg
 
+import com.guy.rpg.actors.entities.PlayerCharacter
+import com.guy.rpg.actors.factories.PlayerCharacterFactory
+import com.guy.rpg.icons.entities.Icon
 import com.guy.rpg.inputs.services.UserInputService
+import com.guy.rpg.levels.entities.Level
 import com.guy.rpg.maps.configurations.MapConfig
-import com.guy.rpg.maps.services.MapService
+import com.guy.rpg.maps.factories.MapFactory
 import com.guy.rpg.outputs.configurations.OutputConfig
 import com.guy.rpg.outputs.services.OutputService
 import com.guy.rpg.titlebars.configurations.TitleBarConfig
-import com.guy.rpg.titlebars.services.TitleBarService
+import com.guy.rpg.titlebars.factories.TitleBarFactory
 
 object Application {
 
   private var titleBarConfig: TitleBarConfig = _
-  private var titleBarService: TitleBarService = _
 
   private var mapConfig: MapConfig = _
-  private var mapService: MapService = _
 
   private var userInputService: UserInputService = _
 
   private var outputConfig: OutputConfig = _
   private var outputService: OutputService = _
 
+  private var level: Level = _
+
   private def initialize(): Unit = {
-
-    titleBarConfig = new TitleBarConfig(
-      titleBarHeight = 1,
-      titleBarWidth = 40,
-      titleBarBorderWidth = 1)
-
-    titleBarService = new TitleBarService(
-      titleBarConfig = titleBarConfig)
-
-    mapConfig = new MapConfig(
-      mapHeight = 10,
-      mapWidth = 40,
-      mapBorderWidth = 1)
-
-    mapService = new MapService(
-      mapConfig = mapConfig)
 
     userInputService = new UserInputService()
 
@@ -47,47 +35,55 @@ object Application {
 
     outputService = new OutputService(
       outputConfig = outputConfig)
+
+    titleBarConfig = new TitleBarConfig(
+      title = "Map 1",
+      titleBarHeight = 1,
+      titleBarWidth = 40,
+      titleBarBorderWidth = 1)
+
+    val titleBar = TitleBarFactory.buildTitleBar(
+      titleBarConfig = titleBarConfig)
+
+    mapConfig = new MapConfig(
+      mapHeight = 10,
+      mapWidth = 40,
+      mapBorderWidth = 1)
+
+    val map = MapFactory.buildMap(
+      mapConfig = mapConfig)
+
+    val playerCharacter = PlayerCharacterFactory.buildPlayerCharacter(
+      startX = 20,
+      startY = 5)
+
+    level = new Level(
+      titleBar = titleBar,
+      map = map,
+      playerCharacter = playerCharacter)
   }
 
   def main(args: Array[String]): Unit = {
     initialize()
 
-    buildExampleMap(
-      mapTitle = "Map 1",
-      heroIconX = 20,
-      heroIconY = 5)
+    var input = ""
+    while (input != "exit") {
 
-    val input = userInputService.askForInput()
+      level.printScreen()
+      input = userInputService.askForInput()
 
-    outputService.printDelimiter()
+      if (input == "move up") {
 
-    if (input == "move up") {
-      buildExampleMap(
-        mapTitle = "Map 1",
-        heroIconX = 20,
-        heroIconY = 4)
-    } else {
-      print("Invalid input.")
+        if (level.playerCharacter.y - 1 > 0) {
+          level.playerCharacter.moveUp()
+        }
+      } else if (input != "exit") {
+        println("Invalid input.")
+      }
+
+      outputService.printDelimiter()
     }
-  }
 
-  private def buildExampleMap(mapTitle: String, heroIconX: Int, heroIconY: Int): Unit = {
-
-    val titleBar = titleBarService.buildTitleBar(
-      title = mapTitle)
-
-    titleBarService.printTitleBar(
-      titleBar = titleBar)
-
-    var map = mapService.buildMap()
-
-    map = mapService.addIcon(
-      icon = 'H',
-      x = heroIconX,
-      y = heroIconY,
-      map = map)
-
-    mapService.printMap(
-      map = map)
+    println("Goodbye!")
   }
 }
