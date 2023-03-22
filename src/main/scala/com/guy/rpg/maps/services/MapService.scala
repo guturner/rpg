@@ -1,10 +1,13 @@
-package com.guy.rpg.maps
+package com.guy.rpg.maps.services
 
-class MapService {
+import com.guy.rpg.maps.configurations.MapConfig
 
-  def buildMap(mapHeight: Int, mapWidth: Int, borderWidth: Int): Array[Array[Char]] = {
-    val totalHeight = mapHeight + borderWidth // no top border
-    val totalWidth = mapWidth + (borderWidth * 2)
+class MapService(
+  val mapConfig: MapConfig) {
+
+  def buildMap(): Array[Array[Char]] = {
+    val totalHeight = mapConfig.mapHeight + mapConfig.mapBorderWidth // no top border
+    val totalWidth = mapConfig.mapWidth + (mapConfig.mapBorderWidth * 2)
 
     val map = Array.ofDim[Char](totalHeight, totalWidth)
 
@@ -37,9 +40,9 @@ class MapService {
     }
   }
 
-  def addIcon(icon: Char, x: Int, y: Int, borderWidth: Int, map: Array[Array[Char]]): Array[Array[Char]] = {
+  def addIcon(icon: Char, x: Int, y: Int, map: Array[Array[Char]]): Array[Array[Char]] = {
 
-    val trueX = x + borderWidth - 1
+    val trueX = x + mapConfig.mapBorderWidth - 1
     val trueY = y - 1 // no top border
 
     map(trueY)(trueX) = icon

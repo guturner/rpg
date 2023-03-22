@@ -1,63 +1,93 @@
 package com.guy.rpg
 
-import com.guy.rpg.configurations.ConfigurationService
-import com.guy.rpg.inputs.UserInputService
-import com.guy.rpg.maps.MapService
-import com.guy.rpg.titlebars.TitleBarService
+import com.guy.rpg.inputs.services.UserInputService
+import com.guy.rpg.maps.configurations.MapConfig
+import com.guy.rpg.maps.services.MapService
+import com.guy.rpg.outputs.configurations.OutputConfig
+import com.guy.rpg.outputs.services.OutputService
+import com.guy.rpg.titlebars.configurations.TitleBarConfig
+import com.guy.rpg.titlebars.services.TitleBarService
 
 object Application {
 
-  private var configurationService: ConfigurationService = _
+  private var titleBarConfig: TitleBarConfig = _
   private var titleBarService: TitleBarService = _
+
+  private var mapConfig: MapConfig = _
   private var mapService: MapService = _
+
   private var userInputService: UserInputService = _
+
+  private var outputConfig: OutputConfig = _
+  private var outputService: OutputService = _
 
   private def initialize(): Unit = {
 
-    configurationService = new ConfigurationService(
-      1,
-      1,
-      40,
-      10,
-      40)
+    titleBarConfig = new TitleBarConfig(
+      titleBarHeight = 1,
+      titleBarWidth = 40,
+      titleBarBorderWidth = 1)
 
-    titleBarService = new TitleBarService()
+    titleBarService = new TitleBarService(
+      titleBarConfig = titleBarConfig)
 
-    mapService = new MapService()
+    mapConfig = new MapConfig(
+      mapHeight = 10,
+      mapWidth = 40,
+      mapBorderWidth = 1)
+
+    mapService = new MapService(
+      mapConfig = mapConfig)
 
     userInputService = new UserInputService()
+
+    outputConfig = new OutputConfig(
+      delimiterIcon = '=',
+      delimiterWidth = 42)
+
+    outputService = new OutputService(
+      outputConfig = outputConfig)
   }
 
   def main(args: Array[String]): Unit = {
     initialize()
 
-    buildExampleMap("Map 1")
+    buildExampleMap(
+      mapTitle = "Map 1",
+      heroIconX = 20,
+      heroIconY = 5)
 
-    userInputService.askForInput()
+    val input = userInputService.askForInput()
+
+    outputService.printDelimiter()
+
+    if (input == "move up") {
+      buildExampleMap(
+        mapTitle = "Map 1",
+        heroIconX = 20,
+        heroIconY = 4)
+    } else {
+      print("Invalid input.")
+    }
   }
 
-  private def buildExampleMap(mapTitle: String): Unit = {
+  private def buildExampleMap(mapTitle: String, heroIconX: Int, heroIconY: Int): Unit = {
 
     val titleBar = titleBarService.buildTitleBar(
-      mapTitle,
-      configurationService.titleBarHeight,
-      configurationService.titleBarWidth,
-      configurationService.borderWidth)
+      title = mapTitle)
 
-    titleBarService.printTitleBar(titleBar)
+    titleBarService.printTitleBar(
+      titleBar = titleBar)
 
-    var map = mapService.buildMap(
-      configurationService.mapHeight,
-      configurationService.mapWidth,
-      configurationService.borderWidth)
+    var map = mapService.buildMap()
 
     map = mapService.addIcon(
-      'H',
-      20,
-      5,
-      configurationService.borderWidth,
-      map)
+      icon = 'H',
+      x = heroIconX,
+      y = heroIconY,
+      map = map)
 
-    mapService.printMap(map)
+    mapService.printMap(
+      map = map)
   }
 }

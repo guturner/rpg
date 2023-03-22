@@ -1,14 +1,14 @@
-package com.guy.rpg.inputs
+package com.guy.rpg.inputs.services
 
 import scala.io.StdIn.readLine
 
 class UserInputService {
 
-  def askForInput(): Unit = {
+  def askForInput(): String = {
     print(">>> ")
 
     val input = readLine()
 
-    println(input)
+    input.toLowerCase
   }
 }

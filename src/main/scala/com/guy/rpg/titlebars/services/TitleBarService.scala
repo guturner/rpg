@@ -1,10 +1,13 @@
-package com.guy.rpg.titlebars
+package com.guy.rpg.titlebars.services
 
-class TitleBarService {
+import com.guy.rpg.titlebars.configurations.TitleBarConfig
 
-  def buildTitleBar(title: String, titleBarHeight: Int, titleBarWidth: Int, borderWidth: Int): Array[Array[Char]] = {
-    val totalHeight = titleBarHeight + (borderWidth * 2)
-    val totalWidth = titleBarWidth + (borderWidth * 2)
+class TitleBarService(
+  val titleBarConfig: TitleBarConfig) {
+
+  def buildTitleBar(title: String): Array[Array[Char]] = {
+    val totalHeight = titleBarConfig.titleBarHeight + (titleBarConfig.titleBarBorderWidth * 2)
+    val totalWidth = titleBarConfig.titleBarWidth + (titleBarConfig.titleBarBorderWidth * 2)
 
     val titleBar = Array.ofDim[Char](totalHeight, totalWidth)
 
@@ -16,7 +19,7 @@ class TitleBarService {
 
         if (i == 0 || i == (totalHeight - 1) || j == 0 || j == (totalWidth - 1)) {
           titleBar(i)(j) = '#'
-        } else if ((i == 0 + borderWidth) && (j > 2) && (titleCounter < title.length)) {
+        } else if ((i == 0 + titleBarConfig.titleBarBorderWidth) && (j > 2) && (titleCounter < title.length)) {
           titleBar(i)(j) = title(titleCounter)
           titleCounter += 1
         } else {
