@@ -27,6 +27,8 @@ object MapFactory {
     }
 
     new Map(
+      mapHeight = mapConfig.mapHeight,
+      mapWidth = mapConfig.mapWidth,
       borderWidth = mapConfig.mapBorderWidth,
       grid = grid)
   }

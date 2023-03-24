@@ -5,6 +5,8 @@ import com.guy.rpg.icons.entities.Icon
 import com.guy.rpg.interfaces.entities.Interface
 
 class Map(
+  val mapHeight: Int,
+  val mapWidth: Int,
   val borderWidth: Int,
   grid: Array[Array[Icon]]) extends Interface(grid) {
 
